@@ -1,8 +1,108 @@
-tmux (2.3-4ubuntu1) zesty; urgency=medium
+tmux (2.5-3build1) artful; urgency=medium
 
-  * Apply fix to handle ENODEV on ttyname() (LP: #1669578)
+  * No-change rebuild against libevent-2.1-6
 
- -- Stéphane Graber <stgraber@ubuntu.com>  Tue, 04 Apr 2017 16:52:17 -0400
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Mon, 31 Jul 2017 02:53:42 +0000
+
+tmux (2.5-3) unstable; urgency=medium
+
+  * Cherry-pick commit 42285ac989 from upstream to try C.UTF-8 in addition
+    to en_US.UTF-8 at startup, and drop dependency on locales added in
+    2.4~git20161101-1 (see #841755).
+  * Bump Standards-Version to 4.0.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 08 Jul 2017 16:36:41 +0200
+
+tmux (2.5-2) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 18 Jun 2017 10:59:40 +0200
+
+tmux (2.5-1) experimental; urgency=medium
+
+  * New upstream release (no changes compared to RC2).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 30 May 2017 22:24:21 +0200
+
+tmux (2.5~rc2-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 13 May 2017 17:00:34 +0200
+
+tmux (2.4-1) experimental; urgency=medium
+
+  * New upstream release.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 20 Apr 2017 20:03:02 +0200
+
+tmux (2.4~git20170318-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 4eec3270ec.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 18 Mar 2017 12:08:11 +0100
+
+tmux (2.4~git20170311-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 266e662fae.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 11 Mar 2017 18:20:02 +0100
+
+tmux (2.4~git20170226-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 14dc2acc25.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 26 Feb 2017 15:50:55 +0100
+
+tmux (2.4~git20170211-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit c75cced07d.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 11 Feb 2017 17:40:00 +0100
+
+tmux (2.4~git20170115-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 4f077fe62c.
+    + Shell globs are now supported in source-file (closes: #629620).
+  * Explicitly enable utempter support.
+  * Adjust to lintian override rename, add new override for debian/watch
+    signature check (upstream doesn't provide signatures).
+  * Switch Vcs-Git URL to the https one.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 15 Jan 2017 12:28:55 +0100
+
+tmux (2.4~git20161210-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit a64b7cfe5d.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 10 Dec 2016 11:00:03 +0100
+
+tmux (2.4~git20161126-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 2864a31311.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 26 Nov 2016 17:15:56 +0100
+
+tmux (2.4~git20161101-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 5da94182ae.
+  * tmux requires a UTF-8 locale to be used, so add dependency on locales
+    to make this more explicit (closes: #841755).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 01 Nov 2016 16:10:55 +0100
+
+tmux (2.4~git20161023-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 5f9ba2f223.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 23 Oct 2016 17:59:34 +0200
+
+tmux (2.4~git20161016-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 3d8efdf310.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 16 Oct 2016 17:57:08 +0200
 
 tmux (2.3-4) unstable; urgency=medium
 

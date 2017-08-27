@@ -38,8 +38,8 @@ Forwarded: not-needed
  
 --- a/compat.h
 +++ b/compat.h
-@@ -196,6 +196,22 @@
- #define flock(fd, op) (0)
+@@ -220,6 +220,22 @@
+ int		 getdtablecount(void);
  #endif
  
 +#ifndef MAXPATHLEN

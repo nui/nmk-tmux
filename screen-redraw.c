@@ -22,21 +22,22 @@
 
 #include "tmux.h"
 
-int	screen_redraw_cell_border1(struct window_pane *, u_int, u_int);
-int	screen_redraw_cell_border(struct client *, u_int, u_int);
-int	screen_redraw_check_cell(struct client *, u_int, u_int, int,
-	    struct window_pane **);
-int	screen_redraw_check_is(u_int, u_int, int, int, struct window *,
-	    struct window_pane *, struct window_pane *);
+static int	screen_redraw_cell_border1(struct window_pane *, u_int, u_int);
+static int	screen_redraw_cell_border(struct client *, u_int, u_int);
+static int	screen_redraw_check_cell(struct client *, u_int, u_int, int,
+		    struct window_pane **);
+static int	screen_redraw_check_is(u_int, u_int, int, int, struct window *,
+		    struct window_pane *, struct window_pane *);
 
-int 	screen_redraw_make_pane_status(struct client *, struct window *,
-	    struct window_pane *);
-void	screen_redraw_draw_pane_status(struct client *, int);
+static int 	screen_redraw_make_pane_status(struct client *, struct window *,
+		    struct window_pane *);
+static void	screen_redraw_draw_pane_status(struct client *, int);
 
-void	screen_redraw_draw_borders(struct client *, int, int, u_int);
-void	screen_redraw_draw_panes(struct client *, u_int);
-void	screen_redraw_draw_status(struct client *, u_int);
-void	screen_redraw_draw_number(struct client *, struct window_pane *, u_int);
+static void	screen_redraw_draw_borders(struct client *, int, int, u_int);
+static void	screen_redraw_draw_panes(struct client *, u_int);
+static void	screen_redraw_draw_status(struct client *, u_int);
+static void	screen_redraw_draw_number(struct client *, struct window_pane *,
+		    u_int);
 
 #define CELL_INSIDE 0
 #define CELL_LEFTRIGHT 1
@@ -59,7 +60,7 @@ void	screen_redraw_draw_number(struct client *, struct window_pane *, u_int);
 #define CELL_STATUS_BOTTOM 2
 
 /* Check if cell is on the border of a particular pane. */
-int
+static int
 screen_redraw_cell_border1(struct window_pane *wp, u_int px, u_int py)
 {
 	/* Inside pane. */
@@ -88,7 +89,7 @@ screen_redraw_cell_border1(struct window_pane *wp, u_int px, u_int py)
 }
 
 /* Check if a cell is on the pane border. */
-int
+static int
 screen_redraw_cell_border(struct client *c, u_int px, u_int py)
 {
 	struct window		*w = c->session->curw->window;
@@ -107,7 +108,7 @@ screen_redraw_cell_border(struct client *c, u_int px, u_int py)
 }
 
 /* Check if cell inside a pane. */
-int
+static int
 screen_redraw_check_cell(struct client *c, u_int px, u_int py, int pane_status,
     struct window_pane **wpp)
 {
@@ -115,6 +116,8 @@ screen_redraw_check_cell(struct client *c, u_int px, u_int py, int pane_status,
 	struct window_pane	*wp;
 	int			 borders;
 	u_int			 right, line;
+
+	*wpp = NULL;
 
 	if (px > w->sx || py > w->sy)
 		return (CELL_OUTSIDE);
@@ -201,12 +204,11 @@ screen_redraw_check_cell(struct client *c, u_int px, u_int py, int pane_status,
 		}
 	}
 
-	*wpp = NULL;
 	return (CELL_OUTSIDE);
 }
 
 /* Check if the border of a particular pane. */
-int
+static int
 screen_redraw_check_is(u_int px, u_int py, int type, int pane_status,
     struct window *w, struct window_pane *wantwp, struct window_pane *wp)
 {
@@ -259,7 +261,7 @@ screen_redraw_check_is(u_int px, u_int py, int type, int pane_status,
 }
 
 /* Update pane status. */
-int
+static int
 screen_redraw_make_pane_status(struct client *c, struct window *w,
     struct window_pane *wp)
 {
@@ -278,7 +280,7 @@ screen_redraw_make_pane_status(struct client *c, struct window *w,
 
 	fmt = options_get_string(w->options, "pane-border-format");
 
-	ft = format_create(NULL, 0);
+	ft = format_create(c, NULL, FORMAT_PANE|wp->id, 0);
 	format_defaults(ft, c, NULL, NULL, wp);
 
 	memcpy(&old, &wp->status_screen, sizeof old);
@@ -293,7 +295,7 @@ screen_redraw_make_pane_status(struct client *c, struct window *w,
 
 	screen_write_start(&ctx, NULL, &wp->status_screen);
 	screen_write_cursormove(&ctx, 0, 0);
-	screen_write_clearline(&ctx);
+	screen_write_clearline(&ctx, 8);
 	screen_write_cnputs(&ctx, outlen, &gc, "%s", out);
 	screen_write_stop(&ctx);
 
@@ -310,7 +312,7 @@ screen_redraw_make_pane_status(struct client *c, struct window *w,
 }
 
 /* Draw pane status. */
-void
+static void
 screen_redraw_draw_pane_status(struct client *c, int pane_status)
 {
 	struct window		*w = c->session->curw->window;
@@ -421,13 +423,16 @@ screen_redraw_pane(struct client *c, struct window_pane *wp)
 	if (status_at_line(c) == 0)
 		yoff++;
 
+	log_debug("%s: redraw pane %%%u (at %u,%u)", c->name, wp->id,
+	    wp->xoff, yoff);
+
 	for (i = 0; i < wp->sy; i++)
 		tty_draw_pane(&c->tty, wp, i, wp->xoff, yoff);
 	tty_reset(&c->tty);
 }
 
 /* Draw the borders. */
-void
+static void
 screen_redraw_draw_borders(struct client *c, int status, int pane_status,
     u_int top)
 {
@@ -514,7 +519,7 @@ screen_redraw_draw_borders(struct client *c, int status, int pane_status,
 }
 
 /* Draw the panes. */
-void
+static void
 screen_redraw_draw_panes(struct client *c, u_int top)
 {
 	struct window		*w = c->session->curw->window;
@@ -533,7 +538,7 @@ screen_redraw_draw_panes(struct client *c, u_int top)
 }
 
 /* Draw the status line. */
-void
+static void
 screen_redraw_draw_status(struct client *c, u_int top)
 {
 	struct tty	*tty = &c->tty;
@@ -545,7 +550,7 @@ screen_redraw_draw_status(struct client *c, u_int top)
 }
 
 /* Draw number on a pane. */
-void
+static void
 screen_redraw_draw_number(struct client *c, struct window_pane *wp, u_int top)
 {
 	struct tty		*tty = &c->tty;
@@ -586,6 +591,8 @@ screen_redraw_draw_number(struct client *c, struct window_pane *wp, u_int top)
 		gc.bg = active_colour;
 	else
 		gc.bg = colour;
+	gc.flags |= GRID_FLAG_NOPALETTE;
+
 	tty_attributes(tty, &gc, wp);
 	for (ptr = buf; *ptr != '\0'; ptr++) {
 		if (*ptr < '0' || *ptr > '9')
@@ -613,6 +620,8 @@ draw_text:
 		gc.fg = active_colour;
 	else
 		gc.fg = colour;
+	gc.flags |= GRID_FLAG_NOPALETTE;
+
 	tty_attributes(tty, &gc, wp);
 	tty_puts(tty, buf);
 

@@ -10,10 +10,10 @@ Build-Depends: debhelper (>= 8.9.4~),
                libncurses5-dev,
                libutempter-dev,
                pkg-config
-Standards-Version: 3.9.8
+Standards-Version: 4.0.0
 Homepage: https://tmux.github.io/
 Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/tmux.git/
-Vcs-Git: git://anonscm.debian.org/collab-maint/tmux.git
+Vcs-Git: https://anonscm.debian.org/git/collab-maint/tmux.git
 
 Package: tmux
 Architecture: any

@@ -92,13 +92,9 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = tmux$(EXEEXT)
 
-# glibc as usual does things ass-backwards and hides useful things by default,
-# so everyone has to add this.
-@IS_GLIBC_TRUE@am__append_1 = -D_GNU_SOURCE
-
 # Set flags for gcc.
-@IS_GCC_TRUE@am__append_2 = -std=gnu99 -O2
-@IS_DEBUG_TRUE@@IS_GCC_TRUE@am__append_3 = -g -Wno-long-long -Wall -W \
+@IS_GCC_TRUE@am__append_1 = -std=gnu99 -O2
+@IS_DEBUG_TRUE@@IS_GCC_TRUE@am__append_2 = -g -Wno-long-long -Wall -W \
 @IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wformat=2 -Wmissing-prototypes \
 @IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wstrict-prototypes \
 @IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wmissing-declarations \
@@ -107,49 +103,29 @@ bin_PROGRAMS = tmux$(EXEEXT)
 @IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wundef -Wbad-function-cast \
 @IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Winline -Wcast-align \
 @IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wdeclaration-after-statement \
-@IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wno-pointer-sign -Wno-attributes
-@IS_DEBUG_TRUE@@IS_GCC_TRUE@am__append_4 = -DDEBUG
-@IS_COVERAGE_TRUE@@IS_GCC_TRUE@am__append_5 = -g -O0 --coverage
-@IS_COVERAGE_TRUE@@IS_GCC_TRUE@am__append_6 = --coverage
-@IS_GCC_TRUE@@IS_PROFILE_TRUE@am__append_7 = -g -O0 -pg
-@IS_GCC_TRUE@@IS_PROFILE_TRUE@am__append_8 = -pg
-@IS_GCC_TRUE@am__append_9 = -iquote.
+@IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wno-pointer-sign -Wno-attributes \
+@IS_DEBUG_TRUE@@IS_GCC_TRUE@	-Wno-unused-result
+@IS_DEBUG_TRUE@@IS_GCC_TRUE@am__append_3 = -DDEBUG
+@IS_GCC_TRUE@am__append_4 = -iquote.
 
 # Set flags for Solaris.
-@IS_GCC_TRUE@@IS_SUNOS_TRUE@am__append_10 = -D_XPG6 -D__EXTENSIONS__ -D_POSIX_PTHREAD_SEMANTICS
-@IS_GCC_FALSE@@IS_SUNOS_TRUE@am__append_11 = -D_XPG4_2 -D__EXTENSIONS__ -D_POSIX_PTHREAD_SEMANTICS
+@IS_GCC_TRUE@@IS_SUNOS_TRUE@am__append_5 = -D_XPG6
+@IS_GCC_FALSE@@IS_SUNOS_TRUE@am__append_6 = -D_XPG4_2
 
 # Set flags for Sun CC.
-@IS_SUNCC_TRUE@am__append_12 = -erroff=E_EMPTY_DECLARATION
+@IS_SUNCC_TRUE@am__append_7 = -erroff=E_EMPTY_DECLARATION
 
 # Set _LINUX_SOURCE_COMPAT for AIX for malloc(0).
-@IS_AIX_TRUE@am__append_13 = -D_LINUX_SOURCE_COMPAT=1
+@IS_AIX_TRUE@am__append_8 = -D_LINUX_SOURCE_COMPAT=1
+
+# Set flags for NetBSD.
+@IS_NETBSD_TRUE@am__append_9 = -D_OPENBSD_SOURCE
+
+# Add compat file for forkpty.
+@NEED_FORKPTY_TRUE@am__append_10 = compat/forkpty-@PLATFORM@.c
 
 # Add compat file for utf8proc.
-@HAVE_UTF8PROC_TRUE@am__append_14 = compat/utf8proc.c
-
-# Add compat for missing or broken functions.
-@NO_FORKPTY_TRUE@am__append_15 = compat/forkpty-@PLATFORM@.c
-@NO_IMSG_TRUE@am__append_16 = compat/imsg.c compat/imsg-buffer.c
-@NO_CLOSEFROM_TRUE@am__append_17 = compat/closefrom.c
-@NO_DAEMON_TRUE@am__append_18 = compat/daemon.c
-@NO_GETPROGNAME_TRUE@am__append_19 = compat/getprogname.c
-@NO_SETPROCTITLE_TRUE@am__append_20 = compat/setproctitle.c
-@NO_SETENV_TRUE@am__append_21 = compat/setenv.c
-@NO_STRLCAT_TRUE@am__append_22 = compat/strlcat.c
-@NO_STRLCPY_TRUE@am__append_23 = compat/strlcpy.c
-@NO_ASPRINTF_TRUE@am__append_24 = compat/asprintf.c
-@NO_FGETLN_TRUE@am__append_25 = compat/fgetln.c
-@NO_FPARSELN_TRUE@am__append_26 = compat/fparseln.c
-@NO_GETOPT_TRUE@am__append_27 = compat/getopt.c
-@NO_STRCASESTR_TRUE@am__append_28 = compat/strcasestr.c
-@NO_STRSEP_TRUE@am__append_29 = compat/strsep.c
-@NO_VIS_TRUE@am__append_30 = compat/vis.c compat/unvis.c
-@NO_STRTONUM_TRUE@am__append_31 = compat/strtonum.c
-@NO_B64_NTOP_TRUE@am__append_32 = compat/b64_ntop.c
-@NO_CFMAKERAW_TRUE@am__append_33 = compat/cfmakeraw.c
-@NO_OPENAT_TRUE@am__append_34 = compat/openat.c
-@NO_REALLOCARRAY_TRUE@am__append_35 = compat/reallocarray.c
+@HAVE_UTF8PROC_TRUE@am__append_11 = compat/utf8proc.c
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -164,92 +140,67 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
+LIBOBJDIR = compat/
 dist_tmux_OBJECTS = alerts.$(OBJEXT) arguments.$(OBJEXT) \
 	attributes.$(OBJEXT) cfg.$(OBJEXT) client.$(OBJEXT) \
 	cmd-attach-session.$(OBJEXT) cmd-bind-key.$(OBJEXT) \
 	cmd-break-pane.$(OBJEXT) cmd-capture-pane.$(OBJEXT) \
 	cmd-choose-buffer.$(OBJEXT) cmd-choose-client.$(OBJEXT) \
-	cmd-choose-tree.$(OBJEXT) cmd-clear-history.$(OBJEXT) \
-	cmd-command-prompt.$(OBJEXT) cmd-confirm-before.$(OBJEXT) \
-	cmd-copy-mode.$(OBJEXT) cmd-detach-client.$(OBJEXT) \
-	cmd-display-message.$(OBJEXT) cmd-display-panes.$(OBJEXT) \
-	cmd-find.$(OBJEXT) cmd-find-window.$(OBJEXT) \
-	cmd-if-shell.$(OBJEXT) cmd-join-pane.$(OBJEXT) \
-	cmd-kill-pane.$(OBJEXT) cmd-kill-server.$(OBJEXT) \
-	cmd-kill-session.$(OBJEXT) cmd-kill-window.$(OBJEXT) \
-	cmd-list-buffers.$(OBJEXT) cmd-list-clients.$(OBJEXT) \
-	cmd-list-keys.$(OBJEXT) cmd-list-panes.$(OBJEXT) \
-	cmd-list-sessions.$(OBJEXT) cmd-list-windows.$(OBJEXT) \
-	cmd-list.$(OBJEXT) cmd-load-buffer.$(OBJEXT) \
-	cmd-lock-server.$(OBJEXT) cmd-move-window.$(OBJEXT) \
-	cmd-new-session.$(OBJEXT) cmd-new-window.$(OBJEXT) \
-	cmd-paste-buffer.$(OBJEXT) cmd-pipe-pane.$(OBJEXT) \
-	cmd-queue.$(OBJEXT) cmd-refresh-client.$(OBJEXT) \
-	cmd-rename-session.$(OBJEXT) cmd-rename-window.$(OBJEXT) \
-	cmd-resize-pane.$(OBJEXT) cmd-respawn-pane.$(OBJEXT) \
-	cmd-respawn-window.$(OBJEXT) cmd-rotate-window.$(OBJEXT) \
-	cmd-run-shell.$(OBJEXT) cmd-save-buffer.$(OBJEXT) \
-	cmd-select-layout.$(OBJEXT) cmd-select-pane.$(OBJEXT) \
-	cmd-select-window.$(OBJEXT) cmd-send-keys.$(OBJEXT) \
-	cmd-set-buffer.$(OBJEXT) cmd-set-environment.$(OBJEXT) \
-	cmd-set-hook.$(OBJEXT) cmd-set-option.$(OBJEXT) \
-	cmd-show-environment.$(OBJEXT) cmd-show-messages.$(OBJEXT) \
-	cmd-show-options.$(OBJEXT) cmd-source-file.$(OBJEXT) \
-	cmd-split-window.$(OBJEXT) cmd-string.$(OBJEXT) \
-	cmd-swap-pane.$(OBJEXT) cmd-swap-window.$(OBJEXT) \
-	cmd-switch-client.$(OBJEXT) cmd-unbind-key.$(OBJEXT) \
-	cmd-wait-for.$(OBJEXT) cmd.$(OBJEXT) colour.$(OBJEXT) \
-	control.$(OBJEXT) control-notify.$(OBJEXT) environ.$(OBJEXT) \
-	format.$(OBJEXT) grid-view.$(OBJEXT) grid.$(OBJEXT) \
-	hooks.$(OBJEXT) input-keys.$(OBJEXT) input.$(OBJEXT) \
-	job.$(OBJEXT) key-bindings.$(OBJEXT) key-string.$(OBJEXT) \
-	layout-custom.$(OBJEXT) layout-set.$(OBJEXT) layout.$(OBJEXT) \
-	log.$(OBJEXT) mode-key.$(OBJEXT) names.$(OBJEXT) \
-	notify.$(OBJEXT) options-table.$(OBJEXT) options.$(OBJEXT) \
-	paste.$(OBJEXT) proc.$(OBJEXT) resize.$(OBJEXT) \
-	screen-redraw.$(OBJEXT) screen-write.$(OBJEXT) \
-	screen.$(OBJEXT) server-client.$(OBJEXT) server-fn.$(OBJEXT) \
-	server.$(OBJEXT) session.$(OBJEXT) signal.$(OBJEXT) \
-	status.$(OBJEXT) style.$(OBJEXT) tmux.$(OBJEXT) \
-	tty-acs.$(OBJEXT) tty-keys.$(OBJEXT) tty-term.$(OBJEXT) \
-	tty.$(OBJEXT) utf8.$(OBJEXT) window-choose.$(OBJEXT) \
-	window-clock.$(OBJEXT) window-copy.$(OBJEXT) window.$(OBJEXT) \
-	xmalloc.$(OBJEXT) xterm-keys.$(OBJEXT)
+	cmd-choose-tree.$(OBJEXT) cmd-command-prompt.$(OBJEXT) \
+	cmd-confirm-before.$(OBJEXT) cmd-copy-mode.$(OBJEXT) \
+	cmd-detach-client.$(OBJEXT) cmd-display-message.$(OBJEXT) \
+	cmd-display-panes.$(OBJEXT) cmd-find-window.$(OBJEXT) \
+	cmd-find.$(OBJEXT) cmd-if-shell.$(OBJEXT) \
+	cmd-join-pane.$(OBJEXT) cmd-kill-pane.$(OBJEXT) \
+	cmd-kill-server.$(OBJEXT) cmd-kill-session.$(OBJEXT) \
+	cmd-kill-window.$(OBJEXT) cmd-list-buffers.$(OBJEXT) \
+	cmd-list-clients.$(OBJEXT) cmd-list-keys.$(OBJEXT) \
+	cmd-list-panes.$(OBJEXT) cmd-list-sessions.$(OBJEXT) \
+	cmd-list-windows.$(OBJEXT) cmd-list.$(OBJEXT) \
+	cmd-load-buffer.$(OBJEXT) cmd-lock-server.$(OBJEXT) \
+	cmd-move-window.$(OBJEXT) cmd-new-session.$(OBJEXT) \
+	cmd-new-window.$(OBJEXT) cmd-paste-buffer.$(OBJEXT) \
+	cmd-pipe-pane.$(OBJEXT) cmd-queue.$(OBJEXT) \
+	cmd-refresh-client.$(OBJEXT) cmd-rename-session.$(OBJEXT) \
+	cmd-rename-window.$(OBJEXT) cmd-resize-pane.$(OBJEXT) \
+	cmd-respawn-pane.$(OBJEXT) cmd-respawn-window.$(OBJEXT) \
+	cmd-rotate-window.$(OBJEXT) cmd-run-shell.$(OBJEXT) \
+	cmd-save-buffer.$(OBJEXT) cmd-select-layout.$(OBJEXT) \
+	cmd-select-pane.$(OBJEXT) cmd-select-window.$(OBJEXT) \
+	cmd-send-keys.$(OBJEXT) cmd-set-buffer.$(OBJEXT) \
+	cmd-set-environment.$(OBJEXT) cmd-set-hook.$(OBJEXT) \
+	cmd-set-option.$(OBJEXT) cmd-show-environment.$(OBJEXT) \
+	cmd-show-messages.$(OBJEXT) cmd-show-options.$(OBJEXT) \
+	cmd-source-file.$(OBJEXT) cmd-split-window.$(OBJEXT) \
+	cmd-string.$(OBJEXT) cmd-swap-pane.$(OBJEXT) \
+	cmd-swap-window.$(OBJEXT) cmd-switch-client.$(OBJEXT) \
+	cmd-unbind-key.$(OBJEXT) cmd-wait-for.$(OBJEXT) cmd.$(OBJEXT) \
+	colour.$(OBJEXT) control-notify.$(OBJEXT) control.$(OBJEXT) \
+	environ.$(OBJEXT) format.$(OBJEXT) grid-view.$(OBJEXT) \
+	grid.$(OBJEXT) hooks.$(OBJEXT) input-keys.$(OBJEXT) \
+	input.$(OBJEXT) job.$(OBJEXT) key-bindings.$(OBJEXT) \
+	key-string.$(OBJEXT) layout-custom.$(OBJEXT) \
+	layout-set.$(OBJEXT) layout.$(OBJEXT) log.$(OBJEXT) \
+	names.$(OBJEXT) notify.$(OBJEXT) options-table.$(OBJEXT) \
+	options.$(OBJEXT) paste.$(OBJEXT) proc.$(OBJEXT) \
+	resize.$(OBJEXT) screen-redraw.$(OBJEXT) \
+	screen-write.$(OBJEXT) screen.$(OBJEXT) \
+	server-client.$(OBJEXT) server-fn.$(OBJEXT) server.$(OBJEXT) \
+	session.$(OBJEXT) signal.$(OBJEXT) status.$(OBJEXT) \
+	style.$(OBJEXT) tmux.$(OBJEXT) tty-acs.$(OBJEXT) \
+	tty-keys.$(OBJEXT) tty-term.$(OBJEXT) tty.$(OBJEXT) \
+	utf8.$(OBJEXT) window-choose.$(OBJEXT) window-clock.$(OBJEXT) \
+	window-copy.$(OBJEXT) window.$(OBJEXT) xmalloc.$(OBJEXT) \
+	xterm-keys.$(OBJEXT)
 am__dirstamp = $(am__leading_dot)dirstamp
-@HAVE_UTF8PROC_TRUE@am__objects_1 = compat/utf8proc.$(OBJEXT)
-@NO_FORKPTY_TRUE@am__objects_2 = compat/forkpty-@PLATFORM@.$(OBJEXT)
-@NO_IMSG_TRUE@am__objects_3 = compat/imsg.$(OBJEXT) \
-@NO_IMSG_TRUE@	compat/imsg-buffer.$(OBJEXT)
-@NO_CLOSEFROM_TRUE@am__objects_4 = compat/closefrom.$(OBJEXT)
-@NO_DAEMON_TRUE@am__objects_5 = compat/daemon.$(OBJEXT)
-@NO_GETPROGNAME_TRUE@am__objects_6 = compat/getprogname.$(OBJEXT)
-@NO_SETPROCTITLE_TRUE@am__objects_7 = compat/setproctitle.$(OBJEXT)
-@NO_SETENV_TRUE@am__objects_8 = compat/setenv.$(OBJEXT)
-@NO_STRLCAT_TRUE@am__objects_9 = compat/strlcat.$(OBJEXT)
-@NO_STRLCPY_TRUE@am__objects_10 = compat/strlcpy.$(OBJEXT)
-@NO_ASPRINTF_TRUE@am__objects_11 = compat/asprintf.$(OBJEXT)
-@NO_FGETLN_TRUE@am__objects_12 = compat/fgetln.$(OBJEXT)
-@NO_FPARSELN_TRUE@am__objects_13 = compat/fparseln.$(OBJEXT)
-@NO_GETOPT_TRUE@am__objects_14 = compat/getopt.$(OBJEXT)
-@NO_STRCASESTR_TRUE@am__objects_15 = compat/strcasestr.$(OBJEXT)
-@NO_STRSEP_TRUE@am__objects_16 = compat/strsep.$(OBJEXT)
-@NO_VIS_TRUE@am__objects_17 = compat/vis.$(OBJEXT) \
-@NO_VIS_TRUE@	compat/unvis.$(OBJEXT)
-@NO_STRTONUM_TRUE@am__objects_18 = compat/strtonum.$(OBJEXT)
-@NO_B64_NTOP_TRUE@am__objects_19 = compat/b64_ntop.$(OBJEXT)
-@NO_CFMAKERAW_TRUE@am__objects_20 = compat/cfmakeraw.$(OBJEXT)
-@NO_OPENAT_TRUE@am__objects_21 = compat/openat.$(OBJEXT)
-@NO_REALLOCARRAY_TRUE@am__objects_22 = compat/reallocarray.$(OBJEXT)
+@NEED_FORKPTY_TRUE@am__objects_1 =  \
+@NEED_FORKPTY_TRUE@	compat/forkpty-@PLATFORM@.$(OBJEXT)
+@HAVE_UTF8PROC_TRUE@am__objects_2 = compat/utf8proc.$(OBJEXT)
 nodist_tmux_OBJECTS = osdep-@PLATFORM@.$(OBJEXT) $(am__objects_1) \
-	$(am__objects_2) $(am__objects_3) $(am__objects_4) \
-	$(am__objects_5) $(am__objects_6) $(am__objects_7) \
-	$(am__objects_8) $(am__objects_9) $(am__objects_10) \
-	$(am__objects_11) $(am__objects_12) $(am__objects_13) \
-	$(am__objects_14) $(am__objects_15) $(am__objects_16) \
-	$(am__objects_17) $(am__objects_18) $(am__objects_19) \
-	$(am__objects_20) $(am__objects_21) $(am__objects_22)
+	$(am__objects_2)
 tmux_OBJECTS = $(dist_tmux_OBJECTS) $(nodist_tmux_OBJECTS)
 tmux_LDADD = $(LDADD)
+tmux_DEPENDENCIES = $(LIBOBJS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -306,12 +257,33 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 AM_RECURSIVE_TARGETS = cscope
-am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/etc/compile \
-	$(top_srcdir)/etc/config.guess $(top_srcdir)/etc/config.sub \
-	$(top_srcdir)/etc/depcomp $(top_srcdir)/etc/install-sh \
-	$(top_srcdir)/etc/missing COPYING README TODO etc/compile \
-	etc/config.guess etc/config.sub etc/depcomp etc/install-sh \
-	etc/missing
+am__DIST_COMMON = $(srcdir)/Makefile.in \
+	$(top_srcdir)/compat/asprintf.c $(top_srcdir)/compat/base64.c \
+	$(top_srcdir)/compat/cfmakeraw.c \
+	$(top_srcdir)/compat/closefrom.c $(top_srcdir)/compat/daemon.c \
+	$(top_srcdir)/compat/err.c \
+	$(top_srcdir)/compat/explicit_bzero.c \
+	$(top_srcdir)/compat/fdforkpty.c $(top_srcdir)/compat/fgetln.c \
+	$(top_srcdir)/compat/fparseln.c \
+	$(top_srcdir)/compat/freezero.c \
+	$(top_srcdir)/compat/getdtablecount.c \
+	$(top_srcdir)/compat/getopt.c \
+	$(top_srcdir)/compat/getprogname.c \
+	$(top_srcdir)/compat/imsg-buffer.c $(top_srcdir)/compat/imsg.c \
+	$(top_srcdir)/compat/reallocarray.c \
+	$(top_srcdir)/compat/recallocarray.c \
+	$(top_srcdir)/compat/setenv.c \
+	$(top_srcdir)/compat/setproctitle.c \
+	$(top_srcdir)/compat/strcasestr.c \
+	$(top_srcdir)/compat/strlcat.c $(top_srcdir)/compat/strlcpy.c \
+	$(top_srcdir)/compat/strndup.c $(top_srcdir)/compat/strnlen.c \
+	$(top_srcdir)/compat/strsep.c $(top_srcdir)/compat/strtonum.c \
+	$(top_srcdir)/compat/unvis.c $(top_srcdir)/compat/vis.c \
+	$(top_srcdir)/etc/compile $(top_srcdir)/etc/config.guess \
+	$(top_srcdir)/etc/config.sub $(top_srcdir)/etc/depcomp \
+	$(top_srcdir)/etc/install-sh $(top_srcdir)/etc/missing COPYING \
+	README TODO etc/compile etc/config.guess etc/config.sub \
+	etc/depcomp etc/install-sh etc/missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -331,23 +303,27 @@ am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
 distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
+AM_CFLAGS = @AM_CFLAGS@ $(am__append_1) $(am__append_2) \
+	$(am__append_7)
+
+# Preprocessor flags.
+AM_CPPFLAGS = @AM_CPPFLAGS@ @XOPEN_DEFINES@ \
+	-DTMUX_CONF="\"$(sysconfdir)/tmux.conf\"" $(am__append_3) \
+	$(am__append_4) $(am__append_5) $(am__append_6) \
+	$(am__append_8) $(am__append_9)
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+AM_LDFLAGS = @AM_LDFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@ $(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_5) $(am__append_7) $(am__append_12)
+CFLAGS = @CFLAGS@
 CPP = @CPP@
-
-# Preprocessor flags.
-CPPFLAGS = @CPPFLAGS@ @XOPEN_DEFINES@ \
-	-DTMUX_CONF="\"$(sysconfdir)/tmux.conf\"" $(am__append_4) \
-	$(am__append_9) $(am__append_10) $(am__append_11)
+CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
-DEFS = @DEFS@ $(am__append_13)
+DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
@@ -360,13 +336,15 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-LDFLAGS = @LDFLAGS@ $(am__append_6) $(am__append_8)
+LDFLAGS = @LDFLAGS@
 LIBEVENT_CFLAGS = @LIBEVENT_CFLAGS@
 LIBEVENT_LIBS = @LIBEVENT_LIBS@
 LIBNCURSES_CFLAGS = @LIBNCURSES_CFLAGS@
 LIBNCURSES_LIBS = @LIBNCURSES_LIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
+LIBTINFO_CFLAGS = @LIBTINFO_CFLAGS@
+LIBTINFO_LIBS = @LIBTINFO_LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MANFORMAT = @MANFORMAT@
@@ -431,6 +409,7 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -444,8 +423,11 @@ CLEANFILES = tmux.1.mdoc tmux.1.man
 # Distribution tarball options.
 EXTRA_DIST = \
 	CHANGES FAQ README TODO COPYING example_tmux.conf compat/*.[ch] \
-	compat.h tmux.h osdep-*.c xmalloc.h mdoc2man.awk tmux.1
+	osdep-*.c mdoc2man.awk tmux.1
 
+
+# Additional object files.
+LDADD = $(LIBOBJS)
 
 # List of sources.
 dist_tmux_SOURCES = \
@@ -461,15 +443,14 @@ dist_tmux_SOURCES = \
 	cmd-choose-buffer.c \
 	cmd-choose-client.c \
 	cmd-choose-tree.c \
-	cmd-clear-history.c \
 	cmd-command-prompt.c \
 	cmd-confirm-before.c \
 	cmd-copy-mode.c \
 	cmd-detach-client.c \
 	cmd-display-message.c \
 	cmd-display-panes.c \
-	cmd-find.c \
 	cmd-find-window.c \
+	cmd-find.c \
 	cmd-if-shell.c \
 	cmd-join-pane.c \
 	cmd-kill-pane.c \
@@ -521,8 +502,9 @@ dist_tmux_SOURCES = \
 	cmd-wait-for.c \
 	cmd.c \
 	colour.c \
-	control.c \
+	compat.h \
 	control-notify.c \
+	control.c \
 	environ.c \
 	format.c \
 	grid-view.c \
@@ -537,7 +519,6 @@ dist_tmux_SOURCES = \
 	layout-set.c \
 	layout.c \
 	log.c \
-	mode-key.c \
 	names.c \
 	notify.c \
 	options-table.c \
@@ -556,6 +537,7 @@ dist_tmux_SOURCES = \
 	status.c \
 	style.c \
 	tmux.c \
+	tmux.h \
 	tty-acs.c \
 	tty-keys.c \
 	tty-term.c \
@@ -566,16 +548,11 @@ dist_tmux_SOURCES = \
 	window-copy.c \
 	window.c \
 	xmalloc.c \
+	xmalloc.h \
 	xterm-keys.c
 
-nodist_tmux_SOURCES = osdep-@PLATFORM@.c $(am__append_14) \
-	$(am__append_15) $(am__append_16) $(am__append_17) \
-	$(am__append_18) $(am__append_19) $(am__append_20) \
-	$(am__append_21) $(am__append_22) $(am__append_23) \
-	$(am__append_24) $(am__append_25) $(am__append_26) \
-	$(am__append_27) $(am__append_28) $(am__append_29) \
-	$(am__append_30) $(am__append_31) $(am__append_32) \
-	$(am__append_33) $(am__append_34) $(am__append_35)
+nodist_tmux_SOURCES = osdep-@PLATFORM@.c $(am__append_10) \
+	$(am__append_11)
 all: all-am
 
 .SUFFIXES:
@@ -661,53 +638,9 @@ compat/$(am__dirstamp):
 compat/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) compat/$(DEPDIR)
 	@: > compat/$(DEPDIR)/$(am__dirstamp)
-compat/utf8proc.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
 compat/forkpty-@PLATFORM@.$(OBJEXT): compat/$(am__dirstamp) \
 	compat/$(DEPDIR)/$(am__dirstamp)
-compat/imsg.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/imsg-buffer.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/closefrom.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/daemon.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/getprogname.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/setproctitle.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/setenv.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/strlcat.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/strlcpy.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/asprintf.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/fgetln.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/fparseln.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/getopt.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/strcasestr.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/strsep.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/vis.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/unvis.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/strtonum.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/b64_ntop.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/cfmakeraw.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/openat.$(OBJEXT): compat/$(am__dirstamp) \
-	compat/$(DEPDIR)/$(am__dirstamp)
-compat/reallocarray.$(OBJEXT): compat/$(am__dirstamp) \
+compat/utf8proc.$(OBJEXT): compat/$(am__dirstamp) \
 	compat/$(DEPDIR)/$(am__dirstamp)
 
 tmux$(EXEEXT): $(tmux_OBJECTS) $(tmux_DEPENDENCIES) $(EXTRA_tmux_DEPENDENCIES) 
@@ -733,7 +666,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd-choose-buffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd-choose-client.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd-choose-tree.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd-clear-history.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd-command-prompt.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd-confirm-before.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd-copy-mode.Po@am__quote@
@@ -809,7 +741,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/layout-set.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/layout.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mode-key.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/names.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/notify.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options-table.Po@am__quote@
@@ -841,24 +772,31 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xmalloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xterm-keys.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/asprintf.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/b64_ntop.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/base64.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/cfmakeraw.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/closefrom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/daemon.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/err.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/explicit_bzero.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/fdforkpty.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/fgetln.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/forkpty-@PLATFORM@.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/fparseln.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/freezero.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/getdtablecount.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/getopt.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/getprogname.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/imsg-buffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/imsg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/openat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/reallocarray.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/recallocarray.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/setenv.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/setproctitle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/strcasestr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/strlcat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/strlcpy.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/strndup.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/strnlen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/strsep.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/strtonum.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@compat/$(DEPDIR)/unvis.Po@am__quote@
@@ -972,9 +910,6 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	$(MAKE) $(AM_MAKEFLAGS) \
-	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
-	  dist-hook
 	-test -n "$(am__skip_mode_fix)" \
 	|| find "$(distdir)" -type d ! -perm -755 \
 		-exec chmod u+rwx,go+rx {} \; -o \
@@ -1133,6 +1068,7 @@ install-strip:
 	    "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'" install; \
 	fi
 mostlyclean-generic:
+	-test -z "$(LIBOBJS)" || rm -f $(LIBOBJS)
 
 clean-generic:
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
@@ -1224,25 +1160,22 @@ uninstall-am: uninstall-binPROGRAMS
 .PHONY: CTAGS GTAGS TAGS all all-am am--refresh check check-am clean \
 	clean-binPROGRAMS clean-cscope clean-generic cscope \
 	cscopelist-am ctags ctags-am dist dist-all dist-bzip2 \
-	dist-gzip dist-hook dist-lzip dist-shar dist-tarZ dist-xz \
-	dist-zip distcheck distclean distclean-compile \
-	distclean-generic distclean-tags distcleancheck distdir \
-	distuninstallcheck dvi dvi-am html html-am info info-am \
-	install install-am install-binPROGRAMS install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-exec-hook install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-binPROGRAMS
+	dist-gzip dist-lzip dist-shar dist-tarZ dist-xz dist-zip \
+	distcheck distclean distclean-compile distclean-generic \
+	distclean-tags distcleancheck distdir distuninstallcheck dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-binPROGRAMS install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-exec-hook \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic pdf pdf-am \
+	ps ps-am tags tags-am uninstall uninstall-am \
+	uninstall-binPROGRAMS
 
 .PRECIOUS: Makefile
 
-dist-hook:
-	make clean
-	grep "^#found_debug=" configure
 
 # Install tmux.1 in the right format.
 install-exec-hook:
