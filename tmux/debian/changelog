@@ -1,8 +1,42 @@
-tmux (2.5-3build1) artful; urgency=medium
+tmux (2.6-3) unstable; urgency=medium
 
-  * No-change rebuild against libevent-2.1-6
+  * Use new URLs on salsa.debian.org for Vcs-* fields.
 
- -- Steve Langasek <steve.langasek@ubuntu.com>  Mon, 31 Jul 2017 02:53:42 +0000
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 31 Dec 2017 15:34:49 +0100
+
+tmux (2.6-2) unstable; urgency=medium
+
+  * debian/docs: Remove FAQ, no longer shipped upstream (closes: #883117).
+  * Bump Standards-Version to 4.1.2.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 31 Dec 2017 13:38:35 +0100
+
+tmux (2.6-1) unstable; urgency=medium
+
+  * New upstream release (with a single fix compared to RC3).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 06 Oct 2017 19:07:13 +0200
+
+tmux (2.6~rc3-1) unstable; urgency=medium
+
+  * New upstream release candidate (closes: #875444).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 11 Sep 2017 19:17:12 +0200
+
+tmux (2.6~rc2-1) unstable; urgency=medium
+
+  * New upstream release candidate.
+  * Bump Standards-Version to 4.1.0.
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 10 Sep 2017 21:33:18 +0200
+
+tmux (2.6~git20170902-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit e941e532fa and roughly
+    equivalent to 2.6-rc1 (closes: #865756).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 02 Sep 2017 10:24:23 +0200
 
 tmux (2.5-3) unstable; urgency=medium
 
@@ -643,7 +677,7 @@ tmux (1.4-9) unstable; urgency=low
 tmux (1.4-8) unstable; urgency=low
 
   * Fix "tmux segfaults with [lost server] if second pane is closed
-    after third pane has been broke out" by patch 99_upstream.diff 
+    after third pane has been broke out" by patch 99_upstream.diff
     (Closes: #622677).
 
  -- Karl Ferdinand Ebert <kfebert@gmail.com>  Tue, 10 May 2011 23:39:17 +0200
@@ -921,4 +955,3 @@ tmux (0.2-1) unstable; urgency=low
   * Initial release.
 
  -- Karl Ferdinand Ebert <kfebert@gmail.com>  Mon, 02 Jun 2008 21:17:30 +0200
-
