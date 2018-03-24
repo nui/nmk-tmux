@@ -159,19 +159,21 @@ cmd_string_parse(const char *s, const char *file, u_int line, char **cause)
 	char		**argv;
 
 	*cause = NULL;
-	if (cmd_string_split(s, &argc, &argv) != 0) {
-		xasprintf(cause, "invalid or unknown command: %s", s);
-		return (NULL);
-	}
+	if (cmd_string_split(s, &argc, &argv) != 0)
+		goto error;
 	if (argc != 0) {
 		cmdlist = cmd_list_parse(argc, argv, file, line, cause);
 		if (cmdlist == NULL) {
 			cmd_free_argv(argc, argv);
-			return (NULL);
+			goto error;
 		}
 	}
 	cmd_free_argv(argc, argv);
 	return (cmdlist);
+
+error:
+	xasprintf(cause, "invalid or unknown command: %s", s);
+	return (NULL);
 }
 
 static void

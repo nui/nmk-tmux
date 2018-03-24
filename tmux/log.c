@@ -61,31 +61,18 @@ log_open(const char *name)
 
 	if (log_level == 0)
 		return;
-	log_close();
+
+	if (log_file != NULL)
+		fclose(log_file);
 
 	xasprintf(&path, "tmux-%s-%ld.log", name, (long)getpid());
-	log_file = fopen(path, "a");
+	log_file = fopen(path, "w");
 	free(path);
 	if (log_file == NULL)
 		return;
 
 	setvbuf(log_file, NULL, _IOLBF, 0);
 	event_set_log_callback(log_event_cb);
-}
-
-/* Toggle logging. */
-void
-log_toggle(const char *name)
-{
-	if (log_level == 0) {
-		log_level = 1;
-		log_open(name);
-		log_debug("log opened");
-	} else {
-		log_debug("log closed");
-		log_level = 0;
-		log_close();
-	}
 }
 
 /* Close logging. */

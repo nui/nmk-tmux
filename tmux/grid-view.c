@@ -75,7 +75,7 @@ grid_view_clear_history(struct grid *gd, u_int bg)
 
 	/* Scroll the lines into the history. */
 	for (yy = 0; yy < last; yy++) {
-		grid_collect_history(gd);
+		grid_collect_history(gd, bg);
 		grid_scroll_history(gd, bg);
 	}
 	if (last < gd->sy)
@@ -96,34 +96,32 @@ grid_view_clear(struct grid *gd, u_int px, u_int py, u_int nx, u_int ny,
 
 /* Scroll region up. */
 void
-grid_view_scroll_region_up(struct grid *gd, u_int rupper, u_int rlower,
-    u_int bg)
+grid_view_scroll_region_up(struct grid *gd, u_int rupper, u_int rlower)
 {
 	if (gd->flags & GRID_HISTORY) {
-		grid_collect_history(gd);
+		grid_collect_history(gd, 8);
 		if (rupper == 0 && rlower == gd->sy - 1)
-			grid_scroll_history(gd, bg);
+			grid_scroll_history(gd, 8);
 		else {
 			rupper = grid_view_y(gd, rupper);
 			rlower = grid_view_y(gd, rlower);
-			grid_scroll_history_region(gd, rupper, rlower, bg);
+			grid_scroll_history_region(gd, rupper, rlower);
 		}
 	} else {
 		rupper = grid_view_y(gd, rupper);
 		rlower = grid_view_y(gd, rlower);
-		grid_move_lines(gd, rupper, rupper + 1, rlower - rupper, bg);
+		grid_move_lines(gd, rupper, rupper + 1, rlower - rupper, 8);
 	}
 }
 
 /* Scroll region down. */
 void
-grid_view_scroll_region_down(struct grid *gd, u_int rupper, u_int rlower,
-    u_int bg)
+grid_view_scroll_region_down(struct grid *gd, u_int rupper, u_int rlower)
 {
 	rupper = grid_view_y(gd, rupper);
 	rlower = grid_view_y(gd, rlower);
 
-	grid_move_lines(gd, rupper + 1, rupper, rlower - rupper, bg);
+	grid_move_lines(gd, rupper + 1, rupper, rlower - rupper, 8);
 }
 
 /* Insert lines. */

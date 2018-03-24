@@ -208,15 +208,9 @@ environ_push(struct environ *env)
 
 /* Log the environment. */
 void
-environ_log(struct environ *env, const char *fmt, ...)
+environ_log(struct environ *env, const char *prefix)
 {
 	struct environ_entry	*envent;
-	va_list			 ap;
-	char			*prefix;
-
-	va_start(ap, fmt);
-	vasprintf(&prefix, fmt, ap);
-	va_end(ap);
 
 	RB_FOREACH(envent, environ, env) {
 		if (envent->value != NULL && *envent->name != '\0') {
@@ -224,8 +218,6 @@ environ_log(struct environ *env, const char *fmt, ...)
 			    envent->value);
 		}
 	}
-
-	free(prefix);
 }
 
 /* Create initial environment for new child. */

@@ -74,10 +74,9 @@ cmd_new_session_exec(struct cmd *self, struct cmdq_item *item)
 	struct termios		 tio, *tiop;
 	struct session_group	*sg;
 	const char		*newname, *errstr, *template, *group, *prefix;
-	const char		*path, *cmd, *cwd;
-	char		       **argv, *cause, *cp, *to_free = NULL;
+	const char		*path, *cmd, *cwd, *to_free = NULL;
+	char		       **argv, *cause, *cp;
 	int			 detached, already_attached, idx, argc;
-	int			 is_control = 0;
 	u_int			 sx, sy;
 	struct environ_entry	*envent;
 	struct cmd_find_state	 fs;
@@ -140,8 +139,6 @@ cmd_new_session_exec(struct cmd *self, struct cmdq_item *item)
 	detached = args_has(args, 'd');
 	if (c == NULL)
 		detached = 1;
-	else if (c->flags & CLIENT_CONTROL)
-		is_control = 1;
 
 	/* Is this client already attached? */
 	already_attached = 0;
@@ -151,8 +148,7 @@ cmd_new_session_exec(struct cmd *self, struct cmdq_item *item)
 	/* Get the new session working directory. */
 	if (args_has(args, 'c')) {
 		cwd = args_get(args, 'c');
-		to_free = format_single(item, cwd, c, NULL, NULL, NULL);
-		cwd = to_free;
+		to_free = cwd = format_single(item, cwd, c, NULL, NULL, NULL);
 	} else if (c != NULL && c->session == NULL && c->cwd != NULL)
 		cwd = c->cwd;
 	else
@@ -189,31 +185,29 @@ cmd_new_session_exec(struct cmd *self, struct cmdq_item *item)
 	}
 
 	/* Find new session size. */
-	if (!detached) {
+	if (c != NULL) {
 		sx = c->tty.sx;
 		sy = c->tty.sy;
-		if (!is_control &&
-		    sy > 0 &&
-		    options_get_number(global_s_options, "status"))
-			sy--;
 	} else {
 		sx = 80;
 		sy = 24;
 	}
-	if ((is_control || detached) && args_has(args, 'x')) {
+	if (detached && args_has(args, 'x')) {
 		sx = strtonum(args_get(args, 'x'), 1, USHRT_MAX, &errstr);
 		if (errstr != NULL) {
 			cmdq_error(item, "width %s", errstr);
 			goto error;
 		}
 	}
-	if ((is_control || detached) && args_has(args, 'y')) {
+	if (detached && args_has(args, 'y')) {
 		sy = strtonum(args_get(args, 'y'), 1, USHRT_MAX, &errstr);
 		if (errstr != NULL) {
 			cmdq_error(item, "height %s", errstr);
 			goto error;
 		}
 	}
+	if (sy > 0 && options_get_number(global_s_options, "status"))
+		sy--;
 	if (sx == 0)
 		sx = 1;
 	if (sy == 0)
@@ -325,16 +319,19 @@ cmd_new_session_exec(struct cmd *self, struct cmdq_item *item)
 
 	if (!detached) {
 		c->flags |= CLIENT_ATTACHED;
-		cmd_find_from_session(&item->shared->current, s, 0);
+		cmd_find_from_session(&item->shared->current, s);
 	}
 
-	cmd_find_from_session(&fs, s, 0);
+	if (to_free != NULL)
+		free((void *)to_free);
+
+	cmd_find_from_session(&fs, s);
 	hooks_insert(s->hooks, item, &fs, "after-new-session");
 
-	free(to_free);
 	return (CMD_RETURN_NORMAL);
 
 error:
-	free(to_free);
+	if (to_free != NULL)
+		free((void *)to_free);
 	return (CMD_RETURN_ERROR);
 }

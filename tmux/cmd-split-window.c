@@ -60,8 +60,8 @@ cmd_split_window_exec(struct cmd *self, struct cmdq_item *item)
 	struct window		*w = wl->window;
 	struct window_pane	*wp = item->target.wp, *new_wp = NULL;
 	struct environ		*env;
-	const char		*cmd, *path, *shell, *template, *cwd;
-	char		       **argv, *cause, *new_cause, *cp, *to_free = NULL;
+	const char		*cmd, *path, *shell, *template, *cwd, *to_free;
+	char		       **argv, *cause, *new_cause, *cp;
 	u_int			 hlimit;
 	int			 argc, size, percentage;
 	enum layout_type	 type;
@@ -85,10 +85,10 @@ cmd_split_window_exec(struct cmd *self, struct cmdq_item *item)
 		argv = args->argv;
 	}
 
+	to_free = NULL;
 	if (args_has(args, 'c')) {
 		cwd = args_get(args, 'c');
-		to_free = format_single(item, cwd, c, s, NULL, NULL);
-		cwd = to_free;
+		to_free = cwd = format_single(item, cwd, c, s, NULL, NULL);
 	} else if (item->client != NULL && item->client->session == NULL)
 		cwd = item->client->cwd;
 	else
@@ -133,7 +133,7 @@ cmd_split_window_exec(struct cmd *self, struct cmdq_item *item)
 		goto error;
 	}
 	new_wp = window_add_pane(w, wp, args_has(args, 'b'), hlimit);
-	layout_make_leaf(lc, new_wp);
+	layout_assign_pane(lc, new_wp);
 
 	path = NULL;
 	if (item->client != NULL && item->client->session == NULL)
@@ -151,13 +151,12 @@ cmd_split_window_exec(struct cmd *self, struct cmdq_item *item)
 	}
 	environ_free(env);
 
-	layout_fix_panes(w, w->sx, w->sy);
 	server_redraw_window(w);
 
 	if (!args_has(args, 'd')) {
 		window_set_active_pane(w, new_wp);
 		session_select(s, wl->idx);
-		cmd_find_from_session(current, s, 0);
+		cmd_find_from_session(current, s);
 		server_redraw_session(s);
 	} else
 		server_status_session(s);
@@ -171,10 +170,12 @@ cmd_split_window_exec(struct cmd *self, struct cmdq_item *item)
 	}
 	notify_window("window-layout-changed", w);
 
-	cmd_find_from_winlink_pane(&fs, wl, new_wp, 0);
+	if (to_free != NULL)
+		free((void *)to_free);
+
+	cmd_find_from_winlink_pane(&fs, wl, new_wp);
 	hooks_insert(s->hooks, item, &fs, "after-split-window");
 
-	free(to_free);
 	return (CMD_RETURN_NORMAL);
 
 error:
@@ -185,6 +186,7 @@ error:
 	cmdq_error(item, "create pane failed: %s", cause);
 	free(cause);
 
-	free(to_free);
+	if (to_free != NULL)
+		free((void *)to_free);
 	return (CMD_RETURN_ERROR);
 }

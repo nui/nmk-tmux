@@ -31,8 +31,7 @@
 static enum cmd_retval	cmd_confirm_before_exec(struct cmd *,
 			    struct cmdq_item *);
 
-static int	cmd_confirm_before_callback(struct client *, void *,
-		    const char *, int);
+static int	cmd_confirm_before_callback(void *, const char *, int);
 static void	cmd_confirm_before_free(void *);
 
 const struct cmd_entry cmd_confirm_before_entry = {
@@ -47,7 +46,8 @@ const struct cmd_entry cmd_confirm_before_entry = {
 };
 
 struct cmd_confirm_before_data {
-	char	*cmd;
+	char		*cmd;
+	struct client	*client;
 };
 
 static enum cmd_retval
@@ -74,6 +74,9 @@ cmd_confirm_before_exec(struct cmd *self, struct cmdq_item *item)
 	cdata = xmalloc(sizeof *cdata);
 	cdata->cmd = xstrdup(args->argv[0]);
 
+	cdata->client = c;
+	cdata->client->references++;
+
 	status_prompt_set(c, new_prompt, NULL,
 	    cmd_confirm_before_callback, cmd_confirm_before_free, cdata,
 	    PROMPT_SINGLE);
@@ -94,10 +97,10 @@ cmd_confirm_before_error(struct cmdq_item *item, void *data)
 }
 
 static int
-cmd_confirm_before_callback(struct client *c, void *data, const char *s,
-    __unused int done)
+cmd_confirm_before_callback(void *data, const char *s, __unused int done)
 {
 	struct cmd_confirm_before_data	*cdata = data;
+	struct client			*c = cdata->client;
 	struct cmd_list			*cmdlist;
 	struct cmdq_item		*new_item;
 	char				*cause;
@@ -132,6 +135,9 @@ static void
 cmd_confirm_before_free(void *data)
 {
 	struct cmd_confirm_before_data	*cdata = data;
+	struct client			*c = cdata->client;
+
+	server_client_unref(c);
 
 	free(cdata->cmd);
 	free(cdata);

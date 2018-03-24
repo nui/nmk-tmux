@@ -97,7 +97,7 @@ cmd_break_pane_exec(struct cmd *self, struct cmdq_item *item)
 	wl = session_attach(dst_s, w, idx, &cause); /* can't fail */
 	if (!args_has(self->args, 'd')) {
 		session_select(dst_s, wl->idx);
-		cmd_find_from_session(current, dst_s, 0);
+		cmd_find_from_session(current, dst_s);
 	}
 
 	server_redraw_session(src_s);
