@@ -1,2 +1,0 @@
-package-lacks-versioned-build-depends-on-debhelper 9
-debian-watch-may-check-gpg-signature

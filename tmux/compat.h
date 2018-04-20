@@ -101,16 +101,16 @@ void	warnx(const char *, ...);
 #include <paths.h>
 #endif
 
-#ifdef HAVE_FORKPTY
 #ifdef HAVE_LIBUTIL_H
 #include <libutil.h>
 #endif
+
 #ifdef HAVE_PTY_H
 #include <pty.h>
 #endif
+
 #ifdef HAVE_UTIL_H
 #include <util.h>
-#endif
 #endif
 
 #ifdef HAVE_VIS
@@ -219,22 +219,6 @@ void		 explicit_bzero(void *, size_t);
 #ifndef HAVE_GETDTABLECOUNT
 /* getdtablecount.c */
 int		 getdtablecount(void);
-#endif
-
-#ifndef MAXPATHLEN
-#define MAXPATHLEN 4096
-#endif
-
-#ifndef PATH_MAX
-#define PATH_MAX 4096
-#endif
-
-#ifndef MAXHOSTNAMELEN
-#define MAXHOSTNAMELEN 64
-#endif
-
-#ifndef IOV_MAX
-#define IOV_MAX	1024
 #endif
 
 #ifndef HAVE_CLOSEFROM

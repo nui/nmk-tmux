@@ -29,9 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#if 0
 #include <libutil.h>
-#endif
 
 struct kinfo_proc	*cmp_procs(struct kinfo_proc *, struct kinfo_proc *);
 char			*osdep_get_name(int, char *);
@@ -137,7 +135,6 @@ error:
 static char *
 osdep_get_cwd_fallback(int fd)
 {
-#if 0
 	static char		 wd[PATH_MAX];
 	struct kinfo_file	*info = NULL;
 	pid_t			 pgrp;
@@ -158,7 +155,6 @@ osdep_get_cwd_fallback(int fd)
 	}
 
 	free(info);
-#endif
 	return (NULL);
 }
 
@@ -197,10 +193,15 @@ osdep_get_cwd(int fd)
 struct event_base *
 osdep_event_init(void)
 {
+	struct event_base	*base;
+
 	/*
 	 * On some versions of FreeBSD, kqueue doesn't work properly on tty
 	 * file descriptors. This is fixed in recent FreeBSD versions.
 	 */
 	setenv("EVENT_NOKQUEUE", "1", 1);
-	return (event_init());
+
+	base = event_init();
+	unsetenv("EVENT_NOKQUEUE");
+	return (base);
 }
