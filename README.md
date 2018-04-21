@@ -1,7 +1,21 @@
-# tmux-ubuntu
+# nmk-tmux
+Tmux used in nmkpkg
 
-# upgrade new version
+# Compile from source
+```sh
+TAG=2.7
+pushd -q <TMUX DIR>
+git archive --prefix=tmux-$TAG/ HEAD | tar -x -C ~/foss/nmk-tmux
+popd
+rm -rf tmux && mv tmux-$TAG tmux
+
+git archive --prefix=tmux-$TAG/ -o tmux-$TAG.tar HEAD:tmux/
+gzip tmux-$TAG.tar
+sha256sum -b tmux-$TAG.tar.gz > tmux-$TAG.tar.gz.sha256
 ```
+
+# upgrade new version from debian
+```sh
 # Get new version from ubuntu
 # At root of repository
 dget -x http://archive.ubuntu.com/ubuntu/pool/main/t/tmux/tmux_2.6-3.dsc
