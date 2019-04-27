@@ -15,6 +15,8 @@ sha256sum -b tmux-$TAG.tar.gz > tmux-$TAG.tar.gz.sha256
 ```
 
 # upgrade new version from debian
+2.9 is built from this method
+
 ```sh
 # Get new version from ubuntu
 # At root of repository
