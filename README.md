@@ -20,13 +20,13 @@ sha256sum -b tmux-$TAG.tar.gz > tmux-$TAG.tar.gz.sha256
 ```sh
 # Get new version from ubuntu
 # At root of repository
-dget -x http://archive.ubuntu.com/ubuntu/pool/main/t/tmux/tmux_2.6-3.dsc
-rm -rf tmux && mv tmux-2.6 tmux
+dget -x http://deb.debian.org/debian/pool/main/t/tmux/tmux_2.9a-1.dsc
+rm -rf tmux && mv tmux-2.9a tmux
 git add tmux
-git commit -m "Upgrade tmux to 2.6"
-TAG=2.6-3
+git commit -m "Upgrade tmux to 2.9a"
+TAG=2.9a-1
 git tag $TAG
-git push --tags
+git push && git push --tags
 git archive --prefix=tmux-$TAG/ -o tmux-$TAG.tar refs/tags/${TAG}:tmux/
 gzip tmux-$TAG.tar
 sha256sum -b tmux-$TAG.tar.gz > tmux-$TAG.tar.gz.sha256
