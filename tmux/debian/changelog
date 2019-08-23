@@ -1,3 +1,19 @@
+tmux (2.9a-3) unstable; urgency=medium
+
+  * Cherry-pick commit 26f274011096 from upstream to fix issues with
+    horizontal splits in xterm 348.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 05 Aug 2019 12:50:34 +0200
+
+tmux (2.9a-2) unstable; urgency=medium
+
+  * Cherry-pick commit 38b8a198bac6 from upstream to fix server crash with
+    some layouts.
+  * Bump Standards-Version to 4.4.0.
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 12 Jul 2019 23:10:46 +0200
+
 tmux (2.9a-1) experimental; urgency=medium
 
   * New upstream release.

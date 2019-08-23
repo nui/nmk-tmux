@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 11~),
                libutempter-dev,
                libutil-freebsd-dev [kfreebsd-any],
                pkg-config
-Standards-Version: 4.3.0
+Standards-Version: 4.4.0
 Homepage: https://tmux.github.io/
 Vcs-Browser: https://salsa.debian.org/rfrancoise/tmux
 Vcs-Git: https://salsa.debian.org/rfrancoise/tmux.git
