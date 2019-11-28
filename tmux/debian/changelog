@@ -1,3 +1,35 @@
+tmux (3.0-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Bump Standards-Version to 4.4.1.
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 26 Nov 2019 22:35:52 +0100
+
+tmux (3.0~rc5-2) experimental; urgency=medium
+
+  * Add Build-Depends on bison (closes: #943648).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 27 Oct 2019 19:36:11 +0100
+
+tmux (3.0~rc5-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 06 Oct 2019 18:18:36 +0200
+
+tmux (3.0~rc4-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 01 Aug 2019 22:14:18 +0200
+
+tmux (3.0~rc3-1) experimental; urgency=medium
+
+  * New upstream release candidate (from 3.0-rc branch, commit 5a501a8ae2).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 13 Jul 2019 11:57:41 +0200
+
 tmux (2.9a-3) unstable; urgency=medium
 
   * Cherry-pick commit 26f274011096 from upstream to fix issues with
