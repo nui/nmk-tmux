@@ -1,3 +1,9 @@
+tmux (3.0a-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 03 Dec 2019 21:49:28 +0100
+
 tmux (3.0-1) unstable; urgency=medium
 
   * New upstream release.

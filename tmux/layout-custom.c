@@ -60,7 +60,7 @@ layout_checksum(const char *layout)
 char *
 layout_dump(struct layout_cell *root)
 {
-	char	layout[BUFSIZ], *out;
+	char	layout[8192], *out;
 
 	*layout = '\0';
 	if (layout_append(root, layout, sizeof layout) != 0)
@@ -210,7 +210,7 @@ layout_parse(struct window *w, const char *layout)
 		}
 		break;
 	}
-	if (lc->sx != sx || lc->sy != sy) {
+	if (lc->type != LAYOUT_WINDOWPANE && (lc->sx != sx || lc->sy != sy)) {
 		log_debug("fix layout %u,%u to %u,%u", lc->sx, lc->sy, sx,sy);
 		layout_print_cell(lc, __func__, 0);
 		lc->sx = sx - 1; lc->sy = sy - 1;
