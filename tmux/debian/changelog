@@ -1,3 +1,15 @@
+tmux (3.0a-2) unstable; urgency=medium
+
+  * Minor packaging fixes courtesy of the Janitor bot and lintian-brush:
+    + Set debhelper-compat version in Build-Depends.
+    + Update renamed lintian tag names in lintian overrides.
+    + Set upstream metadata fields: Name (from ./configure), Repository,
+      Repository-Browse.
+    + Set upstream metadata fields: Bug-Database.
+  * Switch to debhelper compatibility level 12.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 31 Dec 2019 19:45:11 +0100
+
 tmux (3.0a-1) unstable; urgency=medium
 
   * New upstream release.
