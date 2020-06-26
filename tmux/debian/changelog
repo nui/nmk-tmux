@@ -1,3 +1,50 @@
+tmux (3.1b-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * Clarify 3.1~rc1-1 NEWS entry about protocol change (closes: #959698).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 04 May 2020 19:18:57 +0200
+
+tmux (3.1a-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * Cherry-pick commit 6a33a12798 from the upcoming 3.1b bugfix release.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 02 May 2020 14:37:43 +0200
+
+tmux (3.1-1) unstable; urgency=medium
+
+  * New upstream release (with no code changes compared to RC4).
+  * debian/rules: Remove LDFLAGS settings for --as-needed, no longer
+    required in bullseye.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 26 Apr 2020 21:14:52 +0200
+
+tmux (3.1~rc4-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 12 Apr 2020 19:53:23 +0200
+
+tmux (3.1~rc3-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 23 Mar 2020 19:47:56 +0100
+
+tmux (3.1~rc2-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 15 Mar 2020 18:49:41 +0100
+
+tmux (3.1~rc1-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+  * Bump Standards-Version to 4.5.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 11 Feb 2020 21:07:09 +0100
+
 tmux (3.0a-2) unstable; urgency=medium
 
   * Minor packaging fixes courtesy of the Janitor bot and lintian-brush:

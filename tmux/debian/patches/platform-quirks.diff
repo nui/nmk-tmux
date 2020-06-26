@@ -27,10 +27,10 @@ Forwarded: not-needed
 +#include <sys/param.h>
 +#endif
 +
+ #include <fnmatch.h>
  #include <limits.h>
  #include <stdio.h>
- #include <termios.h>
-@@ -221,6 +235,22 @@
+@@ -246,6 +260,22 @@
  int		 getdtablecount(void);
  #endif
  

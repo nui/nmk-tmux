@@ -1,3 +1,14 @@
+tmux (3.1~rc1-1) experimental; urgency=medium
+
+  Please restart tmux entirely after upgrading to 3.1: an old server and
+  a new client will not be fully compatible with each other and the new
+  client may hang.
+
+  Note: if necessary the old client can be used via /proc/pid/exe to
+  talk to the old server, e.g. `/proc/$(pgrep "tmux: server")/exe attach'.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 11 Feb 2020 21:15:08 +0100
+
 tmux (1.9-1) experimental; urgency=low
 
   The server protocol version was changed from 7 to 8, we recommend that
