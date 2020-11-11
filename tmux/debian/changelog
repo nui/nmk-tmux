@@ -1,3 +1,18 @@
+tmux (3.1c-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Drop security fix patch included upstream.
+  * Set upstream metadata fields: Bug-Submit.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 01 Nov 2020 13:45:43 +0100
+
+tmux (3.1b-2) unstable; urgency=high
+
+  * Cherry-pick upstream commit a868bacb46 to fix a stack overflow in CSI
+    parsing (corresponding to OpenBSD 6.8 errata 003).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 30 Oct 2020 12:39:34 +0100
+
 tmux (3.1b-1) unstable; urgency=medium
 
   * New upstream bugfix release.
