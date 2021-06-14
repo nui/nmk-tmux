@@ -1,17 +1,37 @@
-tmux (3.1c-1) unstable; urgency=medium
+tmux (3.2a-1) experimental; urgency=medium
 
   * New upstream release.
-  * Drop security fix patch included upstream.
-  * Set upstream metadata fields: Bug-Submit.
+  * Remove obsolete debian/maintscript stanza, thanks to the Janitor bot.
+  * Add basic autopkgtest test suite, thanks to Athos Ribeiro (LP: #1679410).
 
- -- Romain Francoise <rfrancoise@debian.org>  Sun, 01 Nov 2020 13:45:43 +0100
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 10 Jun 2021 12:10:55 +0200
 
-tmux (3.1b-2) unstable; urgency=high
+tmux (3.2~rc4-1) experimental; urgency=medium
 
-  * Cherry-pick upstream commit a868bacb46 to fix a stack overflow in CSI
-    parsing (corresponding to OpenBSD 6.8 errata 003).
+  * New upstream release candidate.
+  * Bump Standards-Version to 4.5.1.
 
- -- Romain Francoise <rfrancoise@debian.org>  Fri, 30 Oct 2020 12:39:34 +0100
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 04 Mar 2021 20:14:01 +0100
+
+tmux (3.2~rc3-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 08 Nov 2020 21:37:02 +0100
+
+tmux (3.2~rc2-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+  * The specified target window for 'new-window -t' no longer needs to
+    exist, reverting to pre-3.0 behavior (closes: #944778).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 24 Jul 2020 13:22:01 +0200
+
+tmux (3.2~rc1-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Wed, 24 Jun 2020 11:04:14 +0200
 
 tmux (3.1b-1) unstable; urgency=medium
 
