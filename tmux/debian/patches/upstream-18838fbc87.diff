@@ -1,0 +1,20 @@
+commit 18838fbc877b5c003449fa10df353405c024f0f5
+Author: Nicholas Marriott <nicholas.marriott@gmail.com>
+Date:   Thu Jun 2 21:19:32 2022 +0000
+
+    Do not attempt to use client in config file (it will be NULL), GitHub
+    issue 3206.
+
+diff --git a/cmd-run-shell.c b/cmd-run-shell.c
+index db5774d235..560eface7d 100644
+--- a/cmd-run-shell.c
++++ b/cmd-run-shell.c
+@@ -84,7 +84,7 @@ cmd_run_shell_print(struct job *job, const char *msg)
+ 
+ 	if (cdata->wp_id != -1)
+ 		wp = window_pane_find_by_id(cdata->wp_id);
+-	if (wp == NULL && cdata->item != NULL)
++	if (wp == NULL && cdata->item != NULL && cdata->client != NULL)
+ 		wp = server_client_get_pane(cdata->client);
+ 	if (wp == NULL && cmd_find_from_nothing(&fs, 0) == 0)
+ 		wp = fs.wp;

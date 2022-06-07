@@ -30,7 +30,7 @@ Forwarded: not-needed
  #include <fnmatch.h>
  #include <limits.h>
  #include <stdio.h>
-@@ -246,6 +260,22 @@
+@@ -289,6 +303,22 @@
  int		 getdtablecount(void);
  #endif
  

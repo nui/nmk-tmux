@@ -1,3 +1,62 @@
+tmux (3.3-2) unstable; urgency=medium
+
+  * Cherry-pick fixes from upstream Git:
+    + 0f6227f46b: don't silently delete or rename the most recent buffer
+    + 18838fbc87: fix crash when using `run-shell' in config file
+    + 3edda3c5e7: do not unintentionally turn off all mouse mode
+  * Remove obsolete field Name from debian/upstream/metadata.
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 04 Jun 2022 17:08:29 +0200
+
+tmux (3.3-1) experimental; urgency=medium
+
+  * New upstream release, fixes size setting when detached (LP: #1976110).
+  * Drop all upstream patches.
+  * Bump Standards-Version to 4.6.1.
+  * debian/watch: Mangle Debian version rather than upstream's.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Wed, 01 Jun 2022 22:40:47 +0200
+
+tmux (3.3~rc1-2) experimental; urgency=medium
+
+  * Add my own patch from GitHub PR #2899 to fix cross-compilation again.
+  * debian/watch: Add mangle rules to correctly handle -rc releases (which
+    we number -rc1 in Debian).
+  * Set branch to `experimental' in Vcs-Git.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 19 Sep 2021 12:50:47 +0200
+
+tmux (3.3~rc1-1) experimental; urgency=medium
+
+  * New upstream release candidate (3.3-rc).
+  * Update debian/copyright (closes: #904407).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 18 Sep 2021 12:35:01 +0200
+
+tmux (3.2a-4) unstable; urgency=medium
+
+  * Cherry-pick commit b1a8c0fe022e from upstream to fix cross-compilation
+    (closes: #992949).
+  * Switch to debhelper compat level 13.
+  * Update watch file to version 4; no changes.
+  * Set `Rules-Requires-Root' to "no".
+  * Bump Standards-Version to 4.6.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 12 Sep 2021 00:18:18 +0200
+
+tmux (3.2a-3) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 15 Aug 2021 12:43:08 +0200
+
+tmux (3.2a-2) experimental; urgency=medium
+
+  * Cherry-pick upstream commit 32f2d9d089ce (closes: #990215).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 10 Jul 2021 19:16:19 +0200
+
 tmux (3.2a-1) experimental; urgency=medium
 
   * New upstream release.
@@ -32,6 +91,21 @@ tmux (3.2~rc1-1) experimental; urgency=medium
   * New upstream release candidate.
 
  -- Romain Francoise <rfrancoise@debian.org>  Wed, 24 Jun 2020 11:04:14 +0200
+
+tmux (3.1c-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Drop security fix patch included upstream.
+  * Set upstream metadata fields: Bug-Submit.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 01 Nov 2020 13:45:43 +0100
+
+tmux (3.1b-2) unstable; urgency=high
+
+  * Cherry-pick upstream commit a868bacb46 to fix a stack overflow in CSI
+    parsing (corresponding to OpenBSD 6.8 errata 003).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 30 Oct 2020 12:39:34 +0100
 
 tmux (3.1b-1) unstable; urgency=medium
 
