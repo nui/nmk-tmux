@@ -1,3 +1,9 @@
+tmux (3.3a-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 09 Jun 2022 20:04:26 +0200
+
 tmux (3.3-2) unstable; urgency=medium
 
   * Cherry-pick fixes from upstream Git:
