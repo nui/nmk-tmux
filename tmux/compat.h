@@ -303,16 +303,8 @@ void		 explicit_bzero(void *, size_t);
 int		 getdtablecount(void);
 #endif
 
-#ifndef MAXPATHLEN
-#define MAXPATHLEN 4096
-#endif
-
 #ifndef PATH_MAX
 #define PATH_MAX 4096
-#endif
-
-#ifndef MAXHOSTNAMELEN
-#define MAXHOSTNAMELEN 64
 #endif
 
 #ifndef IOV_MAX

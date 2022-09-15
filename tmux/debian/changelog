@@ -1,3 +1,16 @@
+tmux (3.3a-2) unstable; urgency=medium
+
+  [ Pino Toscano ]
+  * Cherry-pick commit 19344efa78 from upstream to fix the fallback
+    implementation of getpeereid() (used on Hurd).
+  * Drop the local defines for MAXPATHLEN & MAXHOSTNAMELEN for platforms that
+    do not have them (i.e. Hurd), as they are not used anymore in generic code.
+
+  [ Gioele Barabucci ]
+  * debian/postinst: Remove test for ancient version.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 29 Aug 2022 22:53:06 +0200
+
 tmux (3.3a-1) unstable; urgency=medium
 
   * New upstream bugfix release.
