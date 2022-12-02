@@ -1,3 +1,12 @@
+tmux (3.3a-3) unstable; urgency=medium
+
+  * debian/source/lintian-overrides: Update renamed lintian tag names in
+    lintian overrides.
+  * debian/copyright: Update copyright year.
+  * debian/watch: use Github tags page instead of releases.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 31 Oct 2022 17:55:13 +0100
+
 tmux (3.3a-2) unstable; urgency=medium
 
   [ Pino Toscano ]

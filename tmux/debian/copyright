@@ -74,7 +74,7 @@ License: FSFULLR
 
 Files: debian/*
 Copyright: 2008-2011 Karl Ferdinand Ebert <kfebert@gmail.com>
-           2010-2021 Romain Francoise <rfrancoise@debian.org>
+           2010-2022 Romain Francoise <rfrancoise@debian.org>
 License: BSD-2-clause
 
 License: BSD-2-clause
