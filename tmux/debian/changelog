@@ -1,3 +1,88 @@
+tmux (3.4-3) unstable; urgency=medium
+
+  * Cherry-pick commit aa17f0e0c1 from upstream to fix crash on invalid
+    Sixel input.
+  * Re-enable Sixel support.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 23 Mar 2024 17:07:31 +0100
+
+tmux (3.4-2) unstable; urgency=medium
+
+  [ Sven Joachim ]
+  * Only enable systemd support on Linux architectures.
+
+  [ Romain Francoise ]
+  * Disable Sixel support for now due to possible server crash on invalid
+    input (GitHub issue #3839).
+  * Cherry-pick commit bd29a48b56 from upstream to fix split-window -p
+    flag confusion.
+  * Cherry-pick changes from upstream PR #3860 fixing a use-after-free
+    when manipulating zoomed windows.
+  * Drop obsolete build-depends (lintian warning).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 09 Mar 2024 12:16:21 +0100
+
+tmux (3.4-1) unstable; urgency=low
+
+  * New upstream release (closes: #1063838).
+    + Fixes crash when pasting into dead panes (closes: #1063237).
+  * Import packaging from experimental, enabling support for Sixel,
+    systemd integration, and management of /etc/shells using dpkg
+    triggers.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 13 Feb 2024 18:42:59 +0100
+
+tmux (3.4~git20240106-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit e809c2ec35.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 06 Jan 2024 16:55:56 +0100
+
+tmux (3.4~git20230924-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit b777780720.
+  * Enable Sixel support.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 24 Sep 2023 13:12:42 +0200
+
+tmux (3.4~git20230722-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit fda3937734.
+  * Apply changes by Helmut Grohne <helmut@subdivi.de> to manage
+    /etc/shells using dpkg triggers (closes: #1023315), avoiding
+    issues related to remove/reinstall cycles (closes: #939889).
+  * Drop now-obsolete debian/preinst.
+  * Silence lintian warning about Tg macro, which is from mandoc
+    1.14.6 and is not a typo.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 22 Jul 2023 23:22:31 +0200
+
+tmux (3.4~git20230617-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit f41c536ff3.
+  * Enable systemd integration (for socket activation and cgroups support).
+  * Build-depend on libncurses-dev, not libncurses5-dev.
+  * Bump Standards-Version to 4.6.2.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 17 Jun 2023 12:11:52 +0200
+
+tmux (3.3a-5) unstable; urgency=medium
+
+  * Fix backport of commit bf636d9575 which breaks OSC 52 clipboard
+    access, with thanks to Claudio Leite (LP: #2040080).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 22 Oct 2023 16:34:17 +0200
+
+tmux (3.3a-4) unstable; urgency=medium
+
+  * Backport upstream changes related to ncurses tparm handling.
+    With thanks to Sven Joachim <svenjoac@gmx.de>, who had independently
+    also worked on this backport (closes: #1038269).
+  * Build-depend on libncurses-dev, not libncurses5-dev.
+  * Bump Standards-Version to 4.6.2.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 17 Jun 2023 17:08:17 +0200
+
 tmux (3.3a-3) unstable; urgency=medium
 
   * debian/source/lintian-overrides: Update renamed lintian tag names in
