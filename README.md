@@ -7,11 +7,11 @@ Tmux used in nmkpkg
 ```sh
 # Get new version from ubuntu
 # At root of repository
-dget -x http://deb.debian.org/debian/pool/main/t/tmux/tmux_3.3a-3.dsc
-rm -rf tmux && mv tmux-3.3a tmux
+dget -x http://deb.debian.org/debian/pool/main/t/tmux/tmux_3.4-3.dsc
+rm -rf tmux && mv tmux-3.4 tmux
 git add tmux
-git commit -m "Upgrade to tmux 3.3a-3"
-TAG=3.3a-3
+git commit -m "Upgrade to tmux 3.4-3"
+TAG=3.4-3
 git tag $TAG
 git push && git push --tags
 git archive --prefix=tmux-$TAG/ -o tmux-$TAG.tar refs/tags/${TAG}:tmux/
