@@ -1,3 +1,25 @@
+tmux (3.4-5) unstable; urgency=medium
+
+  * Cherry-pick more upstream fixes:
+    + 3823fa2c57: start systemd scope with SendSIGHUP=yes to prevent hang
+      on system shutdown.
+    + 424f13fe13: don't crash server when calling switch-client from
+      pane-died hook.
+  * Revert upstream commit 43e5e80343 which breaks search of wrapped lines.
+  * Version build-dependency on libncurses-dev to ensure we pick up updated
+    symbol versions for ncurses 6.5.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Thu, 09 May 2024 17:43:16 +0200
+
+tmux (3.4-4) unstable; urgency=medium
+
+  * Add tmpfiles.d configuration file to prevent automatic removal of tmux
+    user directories under /tmp (closes: #1070724).
+  * Update metadata on upstream patches.
+  * Bump Standards-Version to 4.7.0.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Wed, 08 May 2024 18:46:48 +0200
+
 tmux (3.4-3) unstable; urgency=medium
 
   * Cherry-pick commit aa17f0e0c1 from upstream to fix crash on invalid

@@ -1,6 +1,7 @@
 commit aa17f0e0c1c8b3f1d6fc8617613c74f07de66fae
 Author: Nicholas Marriott <nicholas.marriott@gmail.com>
 Date:   Thu Mar 21 11:37:09 2024 +0000
+Forwarded: not-needed
 
     Fix crash if SIXEL colour register is invalid and remove SIXEL images before
     reflow to avoid a different crash, from Anindya Mukherjee.

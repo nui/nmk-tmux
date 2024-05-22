@@ -7,12 +7,12 @@ Build-Depends: bison,
                debianutils (>= 5.3-1~),
                dpkg-dev (>= 1.16.1~),
                libevent-dev (>> 2.0.10),
-               libncurses-dev,
+               libncurses-dev (>> 6.5),
                libsystemd-dev [linux-any],
                libutempter-dev,
                libutil-freebsd-dev [kfreebsd-any],
                pkgconf
-Standards-Version: 4.6.2
+Standards-Version: 4.7.0
 Rules-Requires-Root: no
 Homepage: https://tmux.github.io/
 Vcs-Browser: https://salsa.debian.org/rfrancoise/tmux

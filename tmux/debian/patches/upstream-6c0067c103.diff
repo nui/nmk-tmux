@@ -1,6 +1,7 @@
 commit 6c0067c10360880334afa50815b880d04edcbf42
 Author: Nicholas Marriott <nicholas.marriott@gmail.com>
 Date:   Thu Mar 21 11:30:42 2024 +0000
+Forwarded: not-needed
 
     Do not notify window-layout-changed if the window is about to be
     destroyed (since it may have been freed by the time the notify happens),
