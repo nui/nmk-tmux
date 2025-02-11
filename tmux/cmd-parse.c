@@ -1032,6 +1032,16 @@ yylex(void)
 			continue;
 		}
 
+		if (ch == '\r') {
+			/*
+			 * Treat \r\n as \n.
+			 */
+			ch = yylex_getc();
+			if (ch != '\n') {
+				yylex_ungetc(ch);
+				ch = '\r';
+			}
+		}
 		if (ch == '\n') {
 			/*
 			 * End of line. Update the line number.
@@ -1378,6 +1388,13 @@ yylex_token(int ch)
 			log_debug("%s: end at EOF", __func__);
 			break;
 		}
+		if (state == NONE && ch == '\r') {
+			ch = yylex_getc();
+			if (ch != '\n') {
+				yylex_ungetc(ch);
+				ch = '\r';
+			}
+		}
 		if (state == NONE && ch == '\n') {
 			log_debug("%s: end at EOL", __func__);
 			break;
@@ -1474,7 +1491,7 @@ error:
 	free(buf);
 	return (NULL);
 }
-#line 1470 "cmd-parse.c"
+#line 1487 "cmd-parse.c"
 /* allocate initial stack or double stack size, up to YYMAXDEPTH */
 static int yygrowstack(void)
 {
@@ -2168,7 +2185,7 @@ case 46:
 				free(yyvsp[-1].commands);
 			}
 break;
-#line 2164 "cmd-parse.c"
+#line 2181 "cmd-parse.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

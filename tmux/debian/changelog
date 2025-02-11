@@ -1,3 +1,90 @@
+tmux (3.5a-3) unstable; urgency=medium
+
+  [ Kirill Rekhov ]
+  * d/u/metadata: add 'Documentation' field and update d/control
+    'Homepage' link field.
+
+  [ Romain Francoise ]
+  * Update Vcs-* fields to point to new location in the Debian group on Salsa.
+  * Transfer ownership to Sebastien Delafond, who has kindly accepted to
+    maintain tmux from now on.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 07 Feb 2025 18:25:06 +0100
+
+tmux (3.5a-2) unstable; urgency=medium
+
+  * Cherry-pick commit 934035db71 from upstream.
+  * Stop building with utempter support (closes: #1084952).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Tue, 15 Oct 2024 22:09:35 +0200
+
+tmux (3.5a-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 05 Oct 2024 10:36:25 +0200
+
+tmux (3.5-2) unstable; urgency=low
+
+  * Include upstream regression fixes from the `tmux-3.5a' hotfix branch.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 04 Oct 2024 22:25:21 +0200
+
+tmux (3.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Merge packaging changes from experimental.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 28 Sep 2024 11:19:20 +0200
+
+tmux (3.5~git20240823-2) experimental; urgency=medium
+
+  * Cherry-pick commit 6e9a914014 on top of previous snapshot to fix
+    broken layout key bindings.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 23 Aug 2024 15:15:58 +0200
+
+tmux (3.5~git20240823-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 7990e5fa8f.
+  * Set branch to `experimental' in Vcs-Git.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 23 Aug 2024 10:10:36 +0200
+
+tmux (3.5~git20240720-1) experimental; urgency=medium
+
+  * New upstream snapshot, from Git commit 3c2621b41b.
+  * Build with jemalloc memory allocator on Linux architectures.
+  * Add new autopkgtest checking that tmux is built against jemalloc.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sat, 20 Jul 2024 10:55:10 +0200
+
+tmux (3.4-8) unstable; urgency=medium
+
+  * Cherry-pick commit 2ac0faf119 from upstream.
+  * Add missing Origin field to db1665868f patch.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Fri, 23 Aug 2024 16:05:05 +0200
+
+tmux (3.4-7) unstable; urgency=medium
+
+  * Cherry-pick commit db1665868f from upstream to fix memory usage of
+    grid data (closes: #1073981).
+
+ -- Romain Francoise <rfrancoise@debian.org>  Mon, 24 Jun 2024 21:03:23 +0200
+
+tmux (3.4-6) unstable; urgency=medium
+
+  [ Aurelien Jarno ]
+  * Drop kfreebsd-* specific build-depends, the ports have been removed.
+
+  [ Romain Francoise ]
+  * Drop kFreeBSD-specific parts of debian/patches/platform-quirks.diff.
+  * Cherry-pick commit 692ce59bce to fix wrong escaping of '$'.
+  * Add more patch metadata to upstream patches.
+
+ -- Romain Francoise <rfrancoise@debian.org>  Sun, 09 Jun 2024 13:08:36 +0200
+
 tmux (3.4-5) unstable; urgency=medium
 
   * Cherry-pick more upstream fixes:

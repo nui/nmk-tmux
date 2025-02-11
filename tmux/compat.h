@@ -21,20 +21,6 @@
 #include <sys/ioctl.h>
 #include <sys/uio.h>
 
-/*
- * Shouldn't be needed, but GNU/kFreeBSD headers are currently slightly broken.
- * The glibc limits.h eventually includes the FreeBSD limits-related headers,
- * which don't define a TTY_NAME_MAX. However, anything (in)directly including
- * the glibc sys/param.h will include the glibc bits/param.h, which defines
- * TTY_NAME_MAX as SPECNAMELEN, i.e. 63, which differs from our fallback of 32.
- * Thus, without this hack, different source files can (and do) end up with
- * different values for TTY_NAME_MAX, which among other things affects the
- * layout of struct window_pane due to the tty buffer.
- */
-#ifdef __FreeBSD_kernel__
-#include <sys/param.h>
-#endif
-
 #include <fnmatch.h>
 #include <limits.h>
 #include <stdio.h>
@@ -301,6 +287,11 @@ void		 explicit_bzero(void *, size_t);
 #ifndef HAVE_GETDTABLECOUNT
 /* getdtablecount.c */
 int		 getdtablecount(void);
+#endif
+
+#ifndef HAVE_GETDTABLESIZE
+/* getdtablesize.c */
+int		 getdtablesize(void);
 #endif
 
 #ifndef PATH_MAX
